@@ -6,23 +6,34 @@ __pycache__/
 *.obj
 dist/
 build/
-target/
+*.class
+*.so
+*.a
+*.dll
+*.exe
+*.out
 
 # Dependencies
+.venv/
+venv/
 node_modules/
-vendor/
-composer.lock
-*.lock
+target/
+.gradle/
+.mypy_cache/
+.pytest_cache/
 
 # Logs and temp files
 *.log
 *.tmp
 *.swp
+*.swo
+*.bak
+*.cache
 
 # Environment
 .env
 .env.local
-*.env.*
+.env.*
 
 # Editors
 .vscode/
@@ -30,13 +41,42 @@ composer.lock
 *.swp
 *.swo
 
-# OS generated files
+# System files
 .DS_Store
 Thumbs.db
+
+# Coverage
+coverage/
+htmlcov/
+.coverage
 
 # Laravel/Lumen specific
 bootstrap/cache/
 storage/logs/
-storage/framework/
-public/storage
+public/storage/
+vendor/
+
+# Compressed files
+*.zip
+*.gz
+*.tar
+*.tgz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.zst
+*.lz4
+*.lzh
+*.cab
+*.arj
+*.rpm
+*.deb
+*.Z
+*.lz
+*.lzo
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tar.zst
 ```
