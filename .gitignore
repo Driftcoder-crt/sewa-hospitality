@@ -1,34 +1,42 @@
 ```
-# Laravel-specific ignores
+# Compiled and build artifacts
+*.pyc
+__pycache__/
+*.o
+*.obj
+dist/
+build/
+target/
+
+# Dependencies
+node_modules/
 vendor/
 composer.lock
-*.env
-.env.*
+*.lock
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+
+# Environment
+.env
 .env.local
-.env.testing
-.env.production
-.env.development
+*.env.*
 
-# Build and cache directories
-bootstrap/cache/
-storage/logs/
-storage/framework/cache/
-storage/framework/sessions/
-storage/framework/views/
-
-# IDE files
+# Editors
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# OS files
+# OS generated files
 .DS_Store
 Thumbs.db
 
-# Logs
-*.log
-
-# Temporary files
-*.tmp
+# Laravel/Lumen specific
+bootstrap/cache/
+storage/logs/
+storage/framework/
+public/storage
 ```
