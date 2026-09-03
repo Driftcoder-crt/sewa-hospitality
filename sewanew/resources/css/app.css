@@ -1,0 +1,54 @@
+@import 'tailwindcss';
+
+/* SEWA Hospitality Design System */
+@theme {
+  --color-sewa-teal: #0E7C66;
+  --color-sewa-teal-dark: #0A5C4B;
+  --color-sewa-bronze: #C9974C;
+  --color-sewa-bronze-light: #E5B86E;
+  --color-sewa-sand: #F5F0EB;
+  --color-sewa-charcoal: #2D3748;
+  
+  --font-family-fraunces: 'Fraunces', serif;
+  --font-family-inter: 'Inter', sans-serif;
+}
+
+/* Base styles */
+body {
+  @apply font-inter bg-sewa-sand text-sewa-charcoal antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  @apply font-fraunces;
+}
+
+/* RTL Support */
+[dir="rtl"] {
+  direction: rtl;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Custom utilities */
+.container-sewa {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.btn-primary {
+  @apply inline-flex items-center px-4 py-2 border border-transparent rounded-md font-medium text-white bg-sewa-teal hover:bg-sewa-teal-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sewa-teal;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center px-4 py-2 border border-gray-300 rounded-md font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sewa-teal;
+}
+
+.card {
+  @apply bg-white rounded-lg shadow-md overflow-hidden;
+}
