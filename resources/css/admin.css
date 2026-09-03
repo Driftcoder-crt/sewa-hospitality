@@ -1,0 +1,59 @@
+/* =====================================================================
+   SEWA HOSPITALITY — ADMIN BUNDLE (admin.* surfaces)
+   One Tailwind build, two content roots: app.css (site + portal) and
+   this file both import resources/css/tokens.css, so token changes
+   propagate to every surface by construction (brand-guidelines §9).
+   Budgets (07-compliance-standards §1): JS ≤ 200 KB brotli (admin),
+   CSS ≤ 60 KB brotli, no third-party admin CSS.
+===================================================================== */
+
+@import "tailwindcss";
+@import "./tokens.css";
+@import "@fontsource-variable/inter";
+
+@layer base {
+    /* Dense admin type scale — the shell sets class="admin-density" on <body>. */
+    body.admin-density {
+        font-size: 14px;
+        line-height: 1.45;
+    }
+
+    /* Alpine pre-boot cloak (ux-interactions §1) — same contract as the
+       public bundle: cloaked overlays stay hidden until Alpine boots. */
+    [x-cloak] {
+        display: none !important;
+    }
+}
+
+@layer components {
+    /* Minimal dense table — the admin index convention (admin-panel doc §6).
+       Logical properties only (compliance §4 RTL contract). */
+    .admin-density table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .admin-density th {
+        text-align: start;
+        padding-block: 0.5rem;
+        padding-inline: 0.75rem;
+        border-bottom: 1px solid var(--line);
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-muted);
+    }
+
+    .admin-density td {
+        padding-block: 0.5rem; /* py-2 */
+        padding-inline: 0.75rem;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+    }
+
+    /* Status/meta pill: inline-flex px-2 rounded-full border border-line text-xs. */
+    .chip {
+        @apply inline-flex items-center rounded-full border border-line px-2 text-xs;
+    }
+}

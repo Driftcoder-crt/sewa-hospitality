@@ -1,0 +1,102 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+
+# One pipeline per ref; a new push cancels the superseded run.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend — Pest · Pint · composer audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP 8.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, gd, exif, fileinfo
+          coverage: none
+
+      # Lock file is law (01-stack-and-dependencies.md §2.6) — composer.lock
+      # is committed; never install without it.
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Lint (Pint)
+        run: composer run lint
+
+      # GATE 2 (13-testing-qa.md §2): dependency audit clean — no high/critical.
+      # composer audit exits non-zero on findings → blocking. Red = no deploy.
+      - name: Dependency audit — composer (blocking)
+        run: composer audit
+
+      # GATES 1 + 3 (13-testing-qa.md §2): tests green + route health.
+      # Runs on the phpunit.xml environment: sqlite :memory:, array cache and
+      # sessions, sync queue, array mailer — no service or network dependency.
+      - name: Tests — Pest parallel (sqlite :memory: envs from phpunit.xml)
+        run: php artisan test --parallel
+
+  frontend:
+    name: Frontend — Vite build · npm audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Node exists at BUILD time only — the server never runs Node
+      # (locked decision, 01-stack-and-dependencies.md §2.7).
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      # GATE 4 (13-testing-qa.md §2): Vite artifact builds — public/build/*
+      # plus the manifest that the release artifact ships prebuilt.
+      - name: Build (Vite)
+        run: npm run build
+
+      # Dependency audit for production dependencies — exits non-zero on
+      # findings → blocking. Red = no deploy.
+      - name: Dependency audit — npm (production deps, blocking)
+        run: npm audit --omit=dev
+
+  gates:
+    name: QA gates summary — 13-testing-qa §2 gates 1–4
+    needs: [backend, frontend]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Summarize QA gate coverage
+        run: |
+          if [ "${{ needs.backend.result }}" != "success" ] || [ "${{ needs.frontend.result }}" != "success" ]; then
+            echo "::error::CI RED (backend=${{ needs.backend.result }}, frontend=${{ needs.frontend.result }}) — red = no deploy (13-testing-qa.md §1)."
+            exit 1
+          fi
+          cat <<'GATES'
+          CI GREEN — this run covers 13-testing-qa §2 gates 1–4:
+
+            Gate 1  Tests green ........ backend: php artisan test --parallel
+                    (unit + feature + mail + queue suites, sqlite :memory:)
+            Gate 2  Dependency audit ... backend: composer audit (blocking)
+                    + frontend: npm audit --omit=dev (blocking)
+            Gate 3  Route health ....... backend: Feature HTTP tests exercise
+                    the route map — 200/302/401/403 as designed, zero 500s
+            Gate 4  Vite build ......... frontend: npm run build emits
+                    public/build/* + manifest for the release artifact
+
+          Deploy discipline: build release artifacts only from a green SHA
+          (./deploy.sh) — 06-hosting-deployment.md §7 PRE-DEPLOY. Red = no deploy.
+          GATES

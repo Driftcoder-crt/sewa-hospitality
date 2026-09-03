@@ -1,0 +1,6 @@
+/.github export-ignore
+/artifacts export-ignore
+/node_modules export-ignore
+/tests export-ignore
+.env export-ignore
+.env.* export-ignore

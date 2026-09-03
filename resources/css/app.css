@@ -1,0 +1,82 @@
+/* =====================================================================
+   SEWA HOSPITALITY — PUBLIC APP BUNDLE (site + portal surfaces)
+   Tokens are config: resources/css/tokens.css is the single source of
+   truth; this file only wires Tailwind, the two variable fonts and the
+   base element defaults. Any token change is a design review + visual
+   regression snapshot (brand-guidelines §9).
+   Budgets (07-compliance-standards §1): one Tailwind build, CSS ≤ 60 KB
+   brotli, fonts 2 families/4 files/≤ 160 KB with font-display swap,
+   zero third-party CSS.
+===================================================================== */
+
+@import "tailwindcss";
+@import "./tokens.css";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/fraunces";
+
+@layer base {
+    html {
+        font-family: var(--font-sans);
+    }
+
+    body {
+        background-color: var(--paper);
+        color: var(--ink);
+        font-size: 17px; /* 17–18px long-form body on mobile (compliance §7) */
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    @media (min-width: 768px) {
+        body {
+            font-size: 18px;
+        }
+    }
+
+    /*
+     * Alpine pre-boot cloak (ux-interactions §1): x-cloak elements stay
+     * hidden until Alpine removes the attribute — without this rule a
+     * slow boot (or a dead Alpine) renders modals (command palette,
+     * consent banner, drawers) wide open behind nothing.
+     */
+    [x-cloak] {
+        display: none !important;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--brand);
+        outline-offset: 2px;
+        border-radius: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
+
+    /* Display serif role (brand §4): Fraunces, medium weight, tight tracking. */
+    .font-display {
+        font-family: var(--font-display);
+        font-weight: 500;
+        letter-spacing: -0.02em;
+    }
+
+    /* Editorial uppercase label (brand §4): 12px, 0.14em tracking. */
+    .eyebrow {
+        font-size: 0.75rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    /* Slim scrollbar for horizontal admin/portal lists. */
+    .scroll-slim {
+        scrollbar-width: thin;
+    }
+}

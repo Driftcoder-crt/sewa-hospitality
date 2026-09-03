@@ -1,0 +1,33 @@
+# robots.txt — sewahospitality.com
+# Spec: 06-content-seo/02-seo-technical.md §3 + 05-aeo-llm-presence.md
+# (search pages excluded; AI crawlers explicitly ALLOWED per AEO policy).
+
+User-agent: *
+Allow: /
+Disallow: /search*
+Disallow: /admin*
+Disallow: /app*
+Disallow: /api*
+Disallow: /preview*
+Disallow: /newsletter/*
+Disallow: /thank-you
+Disallow: /*?tab=
+
+# AEO (05-aeo-llm-presence.md): reputable AI crawlers are allowed to
+# read the public site — answer-first presence is a growth channel.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+Sitemap: https://sewahospitality.com/sitemap_index.xml
