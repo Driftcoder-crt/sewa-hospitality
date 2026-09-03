@@ -1,42 +1,32 @@
-/.phpunit.cache
-/node_modules
-/public/build
-/public/hot
-/public/storage
-/storage/*.key
-/storage/pulse
-/storage/framework/views/*
-!/storage/framework/views/.gitkeep
-/storage/framework/testing
-/storage/laravel.log
-/storage/logs/*
-!/storage/logs/.gitkeep
-/storage/media-library
-/storage/app/public/*
-!/storage/app/public/.gitkeep
-/storage/app/backups/*
-/vendor
-/backups
-/artifacts/*
-!/artifacts/.gitkeep
-.env
-.env.backup
-.env.production
-.env.staging
-/.pest-run.txt
-.phpactor.json
-.phpunit.result.cache
-.phpunit.cache
-Homestead.json
-Homestead.yaml
-auth.json
-npm-debug.log
-yarn-error.log
-/.fleet
-/.idea
-/.nova
-/.vscode
-/.zed
+```
+# Dependency directories
+vendor/
+node_modules/
 
+# Laravel specific
+bootstrap/cache/
+storage/
+.env
+.env.*
+
+# Build artifacts
+dist/
+build/
+public/build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
 *.log
-*.zip
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp files
+*.tmp
+```
